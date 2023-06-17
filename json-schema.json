@@ -1,1 +1,1061 @@
-{"key": "hello"}
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+        "$schema": {
+            "type": "string"
+        },
+        "$type": {
+            "type": "string"
+        }
+    },
+    "$ref": "#/definitions/defaultProperties",
+    "patternProperties": {
+        ".*": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/isToken"
+                },
+                {
+                    "$ref": "#/definitions/isGroup"
+                },
+                {
+                    "$ref": "#/definitions/isTypedGroup"
+                }
+            ]
+        }
+    },
+    "definitions": {
+        "isToken": {
+            "if": {
+                "required": [
+                    "$type",
+                    "$value"
+                ]
+            },
+            "then": {
+                "$ref": "#/definitions/Token"
+            }
+        },
+        "isGroup": {
+            "if": {
+                "properties": {
+                    "$type": {
+                        "not": {}
+                    },
+                    "$value": {
+                        "not": {}
+                    }
+                }
+            },
+            "then": {
+                "$ref": "#/definitions/Group"
+            }
+        },
+        "isTypedGroup": {
+            "if": {
+                "properties": {
+                    "$value": {
+                        "not": {}
+                    }
+                },
+                "required": [
+                    "$type"
+                ]
+            },
+            "then": {
+                "$ref": "#/definitions/TypedGroup"
+            }
+        },
+        "isTypedSubGroup": {
+            "if": {
+                "properties": {
+                    "$value": {
+                        "not": {}
+                    }
+                }
+            },
+            "then": {
+                "$ref": "#/definitions/TypedSubGroup"
+            }
+        },
+        "Token": {
+            "properties": {
+                "$type": {
+                    "$ref": "#/definitions/tokenTypes",
+                    "examples": [
+                        "color"
+                    ]
+                }
+            },
+            "allOf": [
+                {
+                    "$ref": "#/definitions/defaultProperties"
+                },
+                {
+                    "$ref": "#/definitions/tokenValues"
+                }
+            ]
+        },
+        "Group": {
+            "$ref": "#/definitions/defaultProperties",
+            "patternProperties": {
+                ".*": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/isToken"
+                        },
+                        {
+                            "$ref": "#/definitions/isGroup"
+                        },
+                        {
+                            "$ref": "#/definitions/isTypedGroup"
+                        }
+                    ]
+                }
+            }
+        },
+        "TypedGroup": {
+            "properties": {
+                "$type": {
+                    "$ref": "#/definitions/tokenTypes"
+                }
+            },
+            "allOf": [
+                {
+                    "$ref": "#/definitions/defaultProperties"
+                },
+                {
+                    "$ref": "#/definitions/typedGroupTokenValues"
+                }
+            ],
+            "patternProperties": {
+                ".*": {
+                    "properties": {
+                        "$type": {
+                            "not": {}
+                        }
+                    },
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/defaultProperties"
+                        }
+                    ]
+                }
+            }
+        },
+        "TypedSubGroup": {
+            "patternProperties": {
+                ".*": {
+                    "properties": {
+                        "$type": {
+                            "not": {}
+                        }
+                    },
+                    "patternProperties": {
+                        ".*": {
+                            "properties": {
+                                "$type": {
+                                    "not": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "defaultProperties": {
+            "properties": {
+                "$description": {
+                    "type": "string"
+                },
+                "$extensions": {
+                    "type": "object",
+                    "examples": [
+                        {
+                            "org.example.tool": {
+                                "option-1": true
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        "tokenTypes": {
+            "type": "string",
+            "enum": [
+                "color",
+                "dimension",
+                "fontFamily",
+                "fontWeight",
+                "duration",
+                "cubicBezier",
+                "number",
+                "strokeStyle",
+                "border",
+                "transition",
+                "shadow",
+                "gradient",
+                "typography"
+            ]
+        },
+        "tokenValues": {
+            "allOf": [
+                {
+                    "if": {
+                        "$type": {
+                            "$ref": "#/definitions/tokenTypes"
+                        },
+                        "else": false
+                    },
+                    "then": {}
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "$type": {
+                                "const": "color"
+                            }
+                        }
+                    },
+                    "then": {
+                        "$ref": "#/definitions/color"
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "$type": {
+                                "const": "dimension"
+                            }
+                        }
+                    },
+                    "then": {
+                        "$ref": "#/definitions/dimension"
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "$type": {
+                                "const": "fontFamily"
+                            }
+                        }
+                    },
+                    "then": {
+                        "$ref": "#/definitions/fontFamily"
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "$type": {
+                                "const": "fontWeight"
+                            }
+                        }
+                    },
+                    "then": {
+                        "$ref": "#/definitions/fontWeight"
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "$type": {
+                                "const": "duration"
+                            }
+                        }
+                    },
+                    "then": {
+                        "$ref": "#/definitions/duration"
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "$type": {
+                                "const": "cubicBezier"
+                            }
+                        }
+                    },
+                    "then": {
+                        "$ref": "#/definitions/cubicBezier"
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "$type": {
+                                "const": "number"
+                            }
+                        }
+                    },
+                    "then": {
+                        "$ref": "#/definitions/number"
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "$type": {
+                                "const": "strokeStyle"
+                            }
+                        }
+                    },
+                    "then": {
+                        "$ref": "#/definitions/strokeStyle"
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "$type": {
+                                "const": "border"
+                            }
+                        }
+                    },
+                    "then": {
+                        "$ref": "#/definitions/border"
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "$type": {
+                                "const": "transition"
+                            }
+                        }
+                    },
+                    "then": {
+                        "$ref": "#/definitions/transition"
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "$type": {
+                                "const": "shadow"
+                            }
+                        }
+                    },
+                    "then": {
+                        "$ref": "#/definitions/shadow"
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "$type": {
+                                "const": "gradient"
+                            }
+                        }
+                    },
+                    "then": {
+                        "$ref": "#/definitions/gradient"
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "$type": {
+                                "const": "typography"
+                            }
+                        }
+                    },
+                    "then": {
+                        "$ref": "#/definitions/typography"
+                    }
+                }
+            ]
+        },
+        "typedGroupTokenValues": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/isTypedSubGroup"
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "$type": {
+                                "const": "color"
+                            }
+                        }
+                    },
+                    "then": {
+                        "patternProperties": {
+                            ".*": {
+                                "$ref": "#/definitions/color"
+                            }
+                        }
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "$type": {
+                                "const": "dimension"
+                            }
+                        }
+                    },
+                    "then": {
+                        "patternProperties": {
+                            ".*": {
+                                "$ref": "#/definitions/dimension"
+                            }
+                        }
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "$type": {
+                                "const": "fontFamily"
+                            }
+                        }
+                    },
+                    "then": {
+                        "patternProperties": {
+                            ".*": {
+                                "$ref": "#/definitions/fontFamily"
+                            }
+                        }
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "$type": {
+                                "const": "fontWeight"
+                            }
+                        }
+                    },
+                    "then": {
+                        "patternProperties": {
+                            ".*": {
+                                "$ref": "#/definitions/fontWeight"
+                            }
+                        }
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "$type": {
+                                "const": "duration"
+                            }
+                        }
+                    },
+                    "then": {
+                        "patternProperties": {
+                            ".*": {
+                                "$ref": "#/definitions/duration"
+                            }
+                        }
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "$type": {
+                                "const": "cubicBezier"
+                            }
+                        }
+                    },
+                    "then": {
+                        "patternProperties": {
+                            ".*": {
+                                "$ref": "#/definitions/cubicBezier"
+                            }
+                        }
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "$type": {
+                                "const": "number"
+                            }
+                        }
+                    },
+                    "then": {
+                        "patternProperties": {
+                            ".*": {
+                                "$ref": "#/definitions/number"
+                            }
+                        }
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "$type": {
+                                "const": "strokeStyle"
+                            }
+                        }
+                    },
+                    "then": {
+                        "patternProperties": {
+                            ".*": {
+                                "$ref": "#/definitions/strokeStyle"
+                            }
+                        }
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "$type": {
+                                "const": "border"
+                            }
+                        }
+                    },
+                    "then": {
+                        "patternProperties": {
+                            ".*": {
+                                "$ref": "#/definitions/border"
+                            }
+                        }
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "$type": {
+                                "const": "transition"
+                            }
+                        }
+                    },
+                    "then": {
+                        "patternProperties": {
+                            ".*": {
+                                "$ref": "#/definitions/transition"
+                            }
+                        }
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "$type": {
+                                "const": "shadow"
+                            }
+                        }
+                    },
+                    "then": {
+                        "patternProperties": {
+                            ".*": {
+                                "$ref": "#/definitions/shadow"
+                            }
+                        }
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "$type": {
+                                "const": "gradient"
+                            }
+                        }
+                    },
+                    "then": {
+                        "patternProperties": {
+                            ".*": {
+                                "$ref": "#/definitions/gradient"
+                            }
+                        }
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "$type": {
+                                "const": "typography"
+                            }
+                        }
+                    },
+                    "then": {
+                        "patternProperties": {
+                            ".*": {
+                                "$ref": "#/definitions/typography"
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        "reference": {
+            "type": "string",
+            "pattern": "^(?!\\{.*\\{)\\{\\s*([^\\.\\s]+\\s*[^\\.]*)+(\\.\\s*([^\\.\\s]+\\s*[^\\.]*)+)*\\s*\\}(?!.*\\})$",
+            "examples": [
+                "{token group.token name}"
+            ]
+        },
+        "color": {
+            "properties": {
+                "$value": {
+                    "$ref": "#/definitions/colorValue"
+                }
+            }
+        },
+        "colorValue": {
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/reference"
+                },
+                {
+                    "type": "string",
+                    "pattern": "^#([a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+                }
+            ]
+        },
+        "dimension": {
+            "properties": {
+                "$value": {
+                    "$ref": "#/definitions/dimensionValue"
+                }
+            }
+        },
+        "dimensionValue": {
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/reference"
+                },
+                {
+                    "type": "string",
+                    "pattern": "^(\\d+(\\.\\d+)?)(px|rem)$"
+                }
+            ]
+        },
+        "fontFamily": {
+            "properties": {
+                "$value": {
+                    "$ref": "#/definitions/fontFamilyValue"
+                }
+            }
+        },
+        "fontFamilyValue": {
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/reference"
+                },
+                {
+                    "type": "string",
+                    "pattern": "^[^{}].*[^{}]$"
+                },
+                {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "minItems": 1
+                }
+            ]
+        },
+        "fontWeight": {
+            "properties": {
+                "$value": {
+                    "$ref": "#/definitions/fontWeightValue"
+                }
+            }
+        },
+        "fontWeightValue": {
+            "examples": [
+                "hairline",
+                900
+            ],
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/reference"
+                },
+                {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 1000
+                },
+                {
+                    "type": "string",
+                    "enum": [
+                        "thin",
+                        "hairline",
+                        "extra-light",
+                        "ultra-light",
+                        "light",
+                        "normal",
+                        "regular",
+                        "book",
+                        "medium",
+                        "semi-bold",
+                        "demi-bold",
+                        "bold",
+                        "extra-bold",
+                        "ultra-bold",
+                        "black",
+                        "heavy",
+                        "extra-black",
+                        "ultra-black"
+                    ]
+                }
+            ]
+        },
+        "duration": {
+            "properties": {
+                "$value": {
+                    "$ref": "#/definitions/durationValue"
+                }
+            }
+        },
+        "durationValue": {
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/reference"
+                },
+                {
+                    "type": "string",
+                    "pattern": "^(\\d+(\\.\\d+)?)ms$"
+                }
+            ]
+        },
+        "cubicBezier": {
+            "properties": {
+                "$value": {
+                    "$ref": "#/definitions/cubicBezierValue"
+                }
+            }
+        },
+        "cubicBezierValue": {
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/reference"
+                },
+                {
+                    "type": "array",
+                    "items": [
+                        {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                        },
+                        {
+                            "type": "number"
+                        },
+                        {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                        },
+                        {
+                            "type": "number"
+                        }
+                    ],
+                    "minItems": 4,
+                    "maxItems": 4
+                }
+            ]
+        },
+        "number": {
+            "properties": {
+                "$value": {
+                    "$ref": "#/definitions/numberValue"
+                }
+            }
+        },
+        "numberValue": {
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/reference"
+                },
+                {
+                    "type": "number"
+                }
+            ]
+        },
+        "strokeStyle": {
+            "properties": {
+                "$value": {
+                    "$ref": "#/definitions/strokeStyleValue"
+                }
+            }
+        },
+        "strokeStyleValue": {
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/reference"
+                },
+                {
+                    "type": "string",
+                    "enum": [
+                        "solid",
+                        "dashed",
+                        "dotted",
+                        "double",
+                        "groove",
+                        "ridge",
+                        "outset",
+                        "inset"
+                    ]
+                },
+                {
+                    "type": "object",
+                    "required": [
+                        "dashArray",
+                        "lineCap"
+                    ],
+                    "properties": {
+                        "dashArray": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dimensionValue"
+                            }
+                        },
+                        "lineCap": {
+                            "type": "string",
+                            "enum": [
+                                "round",
+                                "butt",
+                                "square"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        "border": {
+            "properties": {
+                "$value": {
+                    "type": "object",
+                    "required": [
+                        "color",
+                        "width",
+                        "style"
+                    ],
+                    "oneOf": [
+                        {
+                            "$ref": "#/definitions/reference"
+                        },
+                        {
+                            "allOf": [
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "color": {
+                                            "$ref": "#/definitions/colorValue"
+                                        }
+                                    }
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "width": {
+                                            "$ref": "#/definitions/dimensionValue"
+                                        }
+                                    }
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "style": {
+                                            "$ref": "#/definitions/strokeStyleValue"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        },
+        "transition": {
+            "properties": {
+                "$value": {
+                    "type": "object",
+                    "required": [
+                        "duration",
+                        "delay",
+                        "timingFunction"
+                    ],
+                    "oneOf": [
+                        {
+                            "$ref": "#/definitions/reference"
+                        },
+                        {
+                            "allOf": [
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "duration": {
+                                            "$ref": "#/definitions/durationValue"
+                                        }
+                                    }
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "delay": {
+                                            "$ref": "#/definitions/durationValue"
+                                        }
+                                    }
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "timingFunction": {
+                                            "$ref": "#/definitions/cubicBezierValue"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        },
+        "shadow": {
+            "properties": {
+                "$value": {
+                    "type": "object",
+                    "required": [
+                        "color",
+                        "offsetX",
+                        "offsetY",
+                        "blur",
+                        "spread"
+                    ],
+                    "oneOf": [
+                        {
+                            "$ref": "#/definitions/reference"
+                        },
+                        {
+                            "allOf": [
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "color": {
+                                            "$ref": "#/definitions/colorValue"
+                                        }
+                                    }
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "offsetX": {
+                                            "$ref": "#/definitions/dimensionValue"
+                                        }
+                                    }
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "offsetY": {
+                                            "$ref": "#/definitions/dimensionValue"
+                                        }
+                                    }
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "blur": {
+                                            "$ref": "#/definitions/dimensionValue"
+                                        }
+                                    }
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "spread": {
+                                            "$ref": "#/definitions/dimensionValue"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        },
+        "gradient": {
+            "properties": {
+                "$value": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "required": [
+                            "color",
+                            "position"
+                        ],
+                        "properties": {
+                            "color": {
+                                "$ref": "#/definitions/colorValue"
+                            },
+                            "position": {
+                                "$ref": "#/definitions/numberValue"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "typography": {
+            "properties": {
+                "$value": {
+                    "type": "object",
+                    "required": [
+                        "fontFamily",
+                        "fontSize",
+                        "fontWeight",
+                        "letterSpacing",
+                        "lineHeight"
+                    ],
+                    "oneOf": [
+                        {
+                            "$ref": "#/definitions/reference"
+                        },
+                        {
+                            "allOf": [
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "fontFamily": {
+                                            "$ref": "#/definitions/fontFamilyValue"
+                                        }
+                                    }
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "fontSize": {
+                                            "$ref": "#/definitions/dimensionValue"
+                                        }
+                                    }
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "fontWeight": {
+                                            "$ref": "#/definitions/fontWeightValue"
+                                        }
+                                    }
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "letterSpacing": {
+                                            "$ref": "#/definitions/dimensionValue"
+                                        }
+                                    }
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "lineHeight": {
+                                            "$ref": "#/definitions/numberValue"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}
